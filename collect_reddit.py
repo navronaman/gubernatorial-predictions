@@ -6,7 +6,7 @@ import random
 def generate_correlated_data():
     # 1. Load the Ground Truth (Your processed polls)
     try:
-        polls_df = pd.read_csv("../data/daily_polls_time_series.csv")
+        polls_df = pd.read_csv("data/daily_polls_time_series.csv")
         polls_df['date'] = pd.to_datetime(polls_df['date'])
     except FileNotFoundError:
         print("Error: Run 'process_polls.py' first to generate the daily time series.")
@@ -104,7 +104,7 @@ def generate_correlated_data():
 
     # 5. Save Correlated Dataset
     df = pd.DataFrame(reddit_data)
-    output_path = "../data/reddit_NewJersey_2025_correlated.csv"
+    output_path = "data/reddit_NewJersey_2025_correlated.csv"
     df.to_csv(output_path, index=False)
     
     print(f"Success! Generated {len(df)} correlated posts.")
