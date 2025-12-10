@@ -1,43 +1,37 @@
+"""
+This is not a part of the main project.
+Step Z - Exploratory Time Series Analysis and Visualization
+"""
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
 import numpy as np
 
-# Set style for better-looking plots
 sns.set_style("whitegrid")
 plt.rcParams['figure.figsize'] = (14, 8)
 
-# Read the raw data
 df = pd.read_csv('raw_data.csv')
 
-# Convert date columns to datetime
 df['start_date'] = pd.to_datetime(df['start_date'])
 df['end_date'] = pd.to_datetime(df['end_date'])
 
-# Create a midpoint date for the poll (when it was conducted)
 df['poll_date'] = df['start_date'] + (df['end_date'] - df['start_date']) / 2
 
-# Sort by poll_date
 df = df.sort_values('poll_date')
 
-# Calculate the spread
 df['spread'] = df['sherrill_pct'] - df['opponent_pct']
 
-# Display the time series dataset
 print("Time Series Dataset:")
-print("=" * 80)
 print(df[['poll_date', 'pollster', 'sherrill_pct', 'opponent_pct', 'spread', 'sample_size']].to_string(index=False))
 print("\n")
 
-# Save the time series dataset
 df.to_csv('time_series_data.csv', index=False)
 print("Time series dataset saved to 'time_series_data.csv'\n")
 
-# Create figure with multiple subplots
 fig, axes = plt.subplots(3, 1, figsize=(14, 12))
 
-# Plot 1: Polling percentages over time
+# Polling percentages over time
 ax1 = axes[0]
 ax1.plot(df['poll_date'], df['sherrill_pct'], 'o-', label='Sherrill', color='blue', linewidth=2, markersize=8)
 ax1.plot(df['poll_date'], df['opponent_pct'], 's-', label='Opponent', color='red', linewidth=2, markersize=8)
@@ -57,7 +51,7 @@ ax1.legend(loc='best')
 ax1.grid(True, alpha=0.3)
 ax1.set_ylim(30, 60)
 
-# Plot 2: Spread over time
+# Spread over time
 ax2 = axes[1]
 colors = ['green' if x > 0 else 'orange' for x in df['spread']]
 ax2.bar(df['poll_date'], df['spread'], color=colors, alpha=0.6, width=2)
@@ -74,7 +68,7 @@ ax2.set_title('Polling Spread Over Time', fontsize=14, fontweight='bold')
 ax2.legend(loc='best')
 ax2.grid(True, alpha=0.3)
 
-# Plot 3: 7-day rolling average (approximated by 3-poll rolling average)
+# 3-poll moving average
 ax3 = axes[2]
 df['sherrill_ma'] = df['sherrill_pct'].rolling(window=3, min_periods=1).mean()
 df['opponent_ma'] = df['opponent_pct'].rolling(window=3, min_periods=1).mean()
@@ -120,17 +114,15 @@ plt.savefig('pollster_comparison.png', dpi=300, bbox_inches='tight')
 print("Pollster comparison saved to 'pollster_comparison.png'\n")
 
 # Print summary statistics
-print("\nSummary Statistics:")
+print("Summary Statistics:")
 print("=" * 80)
 print(f"Date Range: {df['poll_date'].min().strftime('%Y-%m-%d')} to {df['poll_date'].max().strftime('%Y-%m-%d')}")
-print(f"\nSherrill Average: {df['sherrill_pct'].mean():.1f}%")
+print(f"Sherrill Average: {df['sherrill_pct'].mean():.1f}%")
 print(f"Sherrill Std Dev: {df['sherrill_pct'].std():.1f}%")
 print(f"Sherrill Range: {df['sherrill_pct'].min():.0f}% - {df['sherrill_pct'].max():.0f}%")
-print(f"\nOpponent Average: {df['opponent_pct'].mean():.1f}%")
+print(f"Opponent Average: {df['opponent_pct'].mean():.1f}%")
 print(f"Opponent Std Dev: {df['opponent_pct'].std():.1f}%")
 print(f"Opponent Range: {df['opponent_pct'].min():.0f}% - {df['opponent_pct'].max():.0f}%")
-print(f"\nAverage Spread: {df['spread'].mean():.1f}%")
+print(f"Average Spread: {df['spread'].mean():.1f}%")
 print(f"Total Polls: {len(df)}")
 print(f"Number of Pollsters: {df['pollster'].nunique()}")
-
-print("\nAnalysis complete! Check the generated PNG files for visualizations.")
