@@ -1,55 +1,71 @@
+"""
+Step 2: Generate Synthetic Reddit Data Correlated to Polling Trends for New Jersey 2025 Election Cycle
+
+This script generates synthetic Reddit posts whose sentiment and volume are correlated with the polling trends for the NJ Governor 2025 election.
+
+Some other design choices:
+We have decided to use a functional method, where each python script is a function that can be imported and called from other scripts.
+This allows for modularity and reusability across different parts of the project.
+
+Some assumptions:
+- Positive margin indicates Sherrill lead, negative indicates opponent lead
+- Sentiment on Reddit is assumed to "lead" polling data by 3 days
+- The generated dataset will have columns: date, title, body, score, num_comments, url
+
+"""
 import pandas as pd
 import numpy as np
 import datetime as dt
 import random
 
 def generate_correlated_data():
-    # 1. Load the Ground Truth (Your processed polls)
-    try:
-        polls_df = pd.read_csv("data/daily_polls_time_series.csv")
-        polls_df['date'] = pd.to_datetime(polls_df['date'])
-    except FileNotFoundError:
-        print("Error: Run 'process_polls.py' first to generate the daily time series.")
-        return
+    # Load the Ground Truth - Time series processed polls
+    polls_df = pd.read_csv("data/daily_polls_time_series.csv")
+    polls_df['date'] = pd.to_datetime(polls_df['date'])
 
-    print("Generating Reddit data correlated to polling trends...")
+    print("Generating Reddit data correlated to polling trends")
     
     reddit_data = []
     
-    # 2. Iterate through every day of the election cycle
+    # Iterate through every day of the election cycle
     for index, row in polls_df.iterrows():
         current_date = row['date']
         margin = row['margin_interpolated']  # Positive = Sherrill Lead
         
-        # --- THE LOGIC: Sentiment leads Polls ---
-        # We want social media to be a "leading indicator."
-        # So we generate sentiment based on what the poll WILL be in 3 days.
-        # This gives the LSTM a reason to look at this feature!
+        # Crucial point here - Sentiment leads Polls 
+        # We want social media to be a "leading indicator"
+        # So we generate sentiment based on what the poll WILL be in 3 days
+        # This gives the LSTM a reason to look at this feature
         
         # Find the margin 3 days in the future (if possible)
         future_index = index + 3
         if future_index < len(polls_df):
             target_margin = polls_df.iloc[future_index]['margin_interpolated']
         else:
-            target_margin = margin # Fallback for last few days
+            target_margin = margin 
+            # Fallback for last few days
 
-        # 3. Define Probabilities based on Margin
+        # Define Probabilities based on Margin
         # If Sherrill leads by +10, highly positive sentiment.
         # If Sherrill leads by +1, mixed/nervous sentiment.
         # If Opponent leads (negative margin), negative sentiment.
         
         if target_margin > 8: 
-            # Landslide Sherrill -> 70% Positive posts
-            probs = [0.7, 0.1, 0.2] # [Pro-Sherrill, Pro-Opponent, Neutral]
+            # Landslide Sherrill - 70% Positive posts
+            probs = [0.7, 0.1, 0.2] 
+            # [Pro-Sherrill, Pro-Opponent, Neutral]
             base_volume = 15
+            # How much are people talking about it?
         elif target_margin > 3:
-            # Solid Lead -> 50% Positive
+            # Solid Lead - 50% Positive
             probs = [0.5, 0.2, 0.3]
             base_volume = 20
+            
         elif target_margin > 0:
-            # Tight Race (Sherrill up) -> High conflict/volume
+            # Tight Race (Sherrill up) - High conflict/volume
             probs = [0.4, 0.4, 0.2]
-            base_volume = 40 # People argue more in close races
+            base_volume = 40 
+            # People argue more in close races
         else:
             # Opponent Leading -> Negative Sentiment dominates
             probs = [0.2, 0.6, 0.2]
@@ -59,7 +75,7 @@ def generate_correlated_data():
         daily_volume = int(np.random.normal(base_volume, 5))
         daily_volume = max(5, daily_volume) # Minimum 5 posts
 
-        # 4. Generate Posts
+        # Generate Posts
         for _ in range(daily_volume):
             sentiment_type = np.random.choice(['pro_sherrill', 'pro_opponent', 'neutral'], p=probs)
             
@@ -81,7 +97,8 @@ def generate_correlated_data():
                     "The opponent actually answered the questions. Sherrill dodged.",
                     "NJ is broken. Time for new leadership."
                 ])
-                score = np.random.randint(20, 300) # Maybe slightly less upvoted on Reddit (demographic bias)
+                score = np.random.randint(20, 300) 
+                # Maybe slightly less upvoted on Reddit (demographic bias)
                 
             else:
                 text = random.choice([
@@ -99,7 +116,7 @@ def generate_correlated_data():
                 'body': text,
                 'score': score,
                 'num_comments': np.random.randint(0, 100),
-                'url': 'https://reddit.com/mock'
+                'url': 'https://reddit.com/'
             })
 
     # 5. Save Correlated Dataset

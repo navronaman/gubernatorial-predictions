@@ -1,10 +1,12 @@
 """
-Phase 3: Interactive Dashboard - "Pollsters" NJ Governor 2025 Prediction
+Interactive Dashboard - "Pollsters" NJ Governor 2025 Prediction
 
 Streamlit app to visualize the leading indicator effect of social media
 sentiment on polling predictions.
 
 Run with: streamlit run streamlit_app.py
+
+As indicated in the oral exam with TA Naina Chaturvedi, this dashboard was constructed with the help of Generative AI.
 """
 
 import streamlit as st

@@ -1,12 +1,17 @@
 """
-Phase 2: Modeling - ARIMA Baseline vs LSTM with Social Media Sentiment
+This is the magnum opus of the project.
+Step 4: Modeling - ARIMA Baseline vs LSTM with Social Media Sentiment
 
 This script implements the core hypothesis test:
 - Baseline: ARIMA using only polling margin
 - LSTM: Multi-feature model using polling + Reddit sentiment
 - Test: Does social media sentiment improve prediction accuracy?
 
-Required libraries: statsmodels, tensorflow, scikit-learn
+Design choices:
+- We use ARIMA as a classical time series baseline.
+- We use LSTM to capture temporal dependencies and multiple features.
+- We evaluate using RMSE and MAE on a held-out test set (October 2025).
+- Visualizations compare actual vs predicted margins for both models.
 """
 
 import pandas as pd
@@ -17,7 +22,6 @@ from datetime import datetime, timedelta
 import warnings
 warnings.filterwarnings('ignore')
 
-# ML Libraries
 from statsmodels.tsa.arima.model import ARIMA
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -28,23 +32,21 @@ from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping
 
 # Set random seeds for reproducibility
-np.random.seed(42)
-tf.random.set_seed(42)
+np.random.seed(420)
+tf.random.set_seed(420)
 
 # Plotting style
 sns.set_style("whitegrid")
 plt.rcParams['figure.figsize'] = (16, 10)
 
 def load_and_split_data():
-    """Load master training table and split into train/test sets"""
-    print("=" * 80)
-    print("Phase 2: Time Series Modeling")
-    print("=" * 80)
+    # Load master training table and split into train/test sets
+    print("Time Series Modeling")
 
-    print("\n[1/8] Loading Master Training Table...")
+    print("Loading Master Training Table")
     df = pd.read_csv('data/master_training_table.csv')
     df['date'] = pd.to_datetime(df['date'])
-    print(f"   Loaded {len(df)} days of data from {df['date'].min().date()} to {df['date'].max().date()}")
+    print(f"Loaded {len(df)} days of data from {df['date'].min().date()} to {df['date'].max().date()}")
 
     # Define train/test split
     # Train: June-September (Aug-Oct in roadmap, but we'll use more data)
@@ -54,7 +56,7 @@ def load_and_split_data():
     train_df = df[df['date'] < split_date].copy()
     test_df = df[df['date'] >= split_date].copy()
 
-    print(f"\n[2/8] Train/Test Split:")
+    print(f"Train/Test Split")
     print(f"Training set: {train_df['date'].min().date()} to {train_df['date'].max().date()} ({len(train_df)} days)")
     print(f"Test set: {test_df['date'].min().date()} to {test_df['date'].max().date()} ({len(test_df)} days)")
 
@@ -62,8 +64,8 @@ def load_and_split_data():
 
 def train_arima_baseline(train_df, test_df):
     """Train ARIMA model on margin_interpolated only"""
-    print(f"\n[3/8] Training ARIMA Baseline Model...")
-    print("   Using only polling margin (no sentiment features)")
+    print(f"Training ARIMA Baseline Model")
+    print("Using only polling margin (no sentiment features)")
 
     # Extract target variable
     train_values = train_df['margin_interpolated'].values
@@ -71,7 +73,7 @@ def train_arima_baseline(train_df, test_df):
 
     # Fit ARIMA model (order can be tuned)
     # ARIMA(p, d, q) where p=lag order, d=differencing, q=moving average
-    print("   Fitting ARIMA(2,1,2) model...")
+    print("Fitting ARIMA(2,1,2) model")
     model = ARIMA(train_values, order=(2, 1, 2))
     arima_fit = model.fit()
 
@@ -83,8 +85,8 @@ def train_arima_baseline(train_df, test_df):
     rmse = np.sqrt(mean_squared_error(test_values, arima_predictions))
     mae = mean_absolute_error(test_values, arima_predictions)
 
-    print(f"   ARIMA Test RMSE: {rmse:.3f}")
-    print(f"   ARIMA Test MAE: {mae:.3f}")
+    print(f"ARIMA Test RMSE: {rmse:.3f}")
+    print(f"ARIMA Test MAE: {mae:.3f}")
 
     return arima_fit, arima_predictions, rmse, mae
 
@@ -97,8 +99,8 @@ def prepare_lstm_data(train_df, test_df, lookback=14):
     2. reddit_avg_sentiment
     3. reddit_post_volume (normalized)
     """
-    print(f"\n[4/8] Preparing data for LSTM...")
-    print(f"   Lookback window: {lookback} days")
+    print(f"Preparing data for LSTM...")
+    print(f"Lookback window: {lookback} days")
 
     # Select features
     feature_cols = ['margin_interpolated', 'reddit_avg_sentiment', 'reddit_post_volume']
@@ -133,15 +135,16 @@ def prepare_lstm_data(train_df, test_df, lookback=14):
     return X_train, y_train, X_test, y_test, scaler, feature_cols
 
 def build_lstm_model(input_shape):
-    """Build LSTM model architecture"""
-    print(f"\n[5/8] Building LSTM Model...")
+    # Build LSTM model architecture
+    print(f"Building LSTM Model")
 
     model = Sequential([
         LSTM(50, activation='relu', input_shape=input_shape, return_sequences=False),
         Dropout(0.2),
         Dense(25, activation='relu'),
         Dropout(0.2),
-        Dense(1)  # Output: single value (margin prediction)
+        Dense(1)  
+        # Output: single value (margin prediction)
     ])
 
     model.compile(optimizer='adam', loss='mse', metrics=['mae'])
@@ -152,8 +155,8 @@ def build_lstm_model(input_shape):
     return model
 
 def train_lstm_model(model, X_train, y_train, X_test, y_test):
-    """Train LSTM model with early stopping"""
-    print(f"\n[6/8] Training LSTM Model...")
+    # Train LSTM model with early stopping 
+    print(f"Training LSTM Model")
 
     # Early stopping to prevent overfitting
     early_stop = EarlyStopping(monitor='val_loss', patience=20, restore_best_weights=True)
@@ -168,15 +171,15 @@ def train_lstm_model(model, X_train, y_train, X_test, y_test):
         verbose=0
     )
 
-    print(f"   Training completed in {len(history.history['loss'])} epochs")
-    print(f"   Final training loss: {history.history['loss'][-1]:.4f}")
-    print(f"   Final validation loss: {history.history['val_loss'][-1]:.4f}")
+    print(f"Training completed in {len(history.history['loss'])} epochs")
+    print(f"Final training loss: {history.history['loss'][-1]:.4f}")
+    print(f"Final validation loss: {history.history['val_loss'][-1]:.4f}")
 
     return model, history
 
 def evaluate_lstm(model, X_test, y_test, scaler, test_df, lookback):
-    """Evaluate LSTM model and inverse transform predictions"""
-    print(f"\n[7/8] Evaluating LSTM Model...")
+    # Evaluate LSTM model and inverse transform predictions
+    print(f"Evaluating LSTM Model")
 
     # Make predictions
     lstm_predictions_scaled = model.predict(X_test, verbose=0)
@@ -196,15 +199,15 @@ def evaluate_lstm(model, X_test, y_test, scaler, test_df, lookback):
     rmse = np.sqrt(mean_squared_error(actual_values, lstm_predictions))
     mae = mean_absolute_error(actual_values, lstm_predictions)
 
-    print(f"   LSTM Test RMSE: {rmse:.3f}")
-    print(f"   LSTM Test MAE: {mae:.3f}")
+    print(f"LSTM Test RMSE: {rmse:.3f}")
+    print(f"LSTM Test MAE: {mae:.3f}")
 
     return lstm_predictions, actual_values, rmse, mae
 
 def visualize_results(df, train_df, test_df, arima_predictions, lstm_predictions,
                      arima_rmse, lstm_rmse, lookback):
-    """Create comprehensive visualization of results"""
-    print(f"\n[8/8] Creating visualizations...")
+    # Create comprehensive visualization of results
+    print(f"Creating visualizations")
 
     fig, axes = plt.subplots(3, 1, figsize=(16, 12))
 
@@ -219,30 +222,26 @@ def visualize_results(df, train_df, test_df, arima_predictions, lstm_predictions
 
     # Plot ARIMA predictions
     arima_dates = test_df['date'].values
-    ax1.plot(arima_dates, arima_predictions, 's-', label=f'ARIMA Forecast (RMSE: {arima_rmse:.2f})',
-             color='blue', linewidth=2, markersize=6, alpha=0.7)
+    ax1.plot(arima_dates, arima_predictions, 's-', label=f'ARIMA Forecast (RMSE: {arima_rmse:.2f})', color='blue', linewidth=2, markersize=6, alpha=0.7)
 
     # Plot LSTM predictions (offset by lookback days)
     lstm_dates = test_df['date'].values[lookback:]
-    ax1.plot(lstm_dates, lstm_predictions, '^-', label=f'LSTM Forecast (RMSE: {lstm_rmse:.2f})',
-             color='green', linewidth=2, markersize=6, alpha=0.7)
+    ax1.plot(lstm_dates, lstm_predictions, '^-', label=f'LSTM Forecast (RMSE: {lstm_rmse:.2f})',color='green', linewidth=2, markersize=6, alpha=0.7)
 
     ax1.set_xlabel('Date', fontsize=12)
     ax1.set_ylabel('Margin (Sherrill - Opponent %)', fontsize=12)
-    ax1.set_title('Polling Margin Forecast: ARIMA vs LSTM with Social Media Sentiment',
-                  fontsize=14, fontweight='bold')
+    ax1.set_title('Polling Margin Forecast: ARIMA vs LSTM with Social Media Sentiment', fontsize=14, fontweight='bold')
     ax1.legend(loc='best', fontsize=10)
     ax1.grid(True, alpha=0.3)
 
-    # Plot 2: Test period zoom-in
+    # Test period zoom-in (October 2025)
     ax2 = axes[1]
     test_actual = test_df['margin_interpolated'].values
     test_dates = test_df['date'].values
 
     ax2.plot(test_dates, test_actual, 'o-', label='Actual', color='black',
              linewidth=3, markersize=8)
-    ax2.plot(arima_dates, arima_predictions, 's--', label='ARIMA', color='blue',
-             linewidth=2, markersize=7, alpha=0.7)
+    ax2.plot(arima_dates, arima_predictions, 's--', label='ARIMA', color='blue', linewidth=2, markersize=7, alpha=0.7)
     ax2.plot(lstm_dates, lstm_predictions, '^--', label='LSTM', color='green',
              linewidth=2, markersize=7, alpha=0.7)
 
@@ -252,13 +251,12 @@ def visualize_results(df, train_df, test_df, arima_predictions, lstm_predictions
     ax2.legend(loc='best', fontsize=11)
     ax2.grid(True, alpha=0.3)
 
-    # Plot 3: Prediction errors
+    # Prediction errors
     ax3 = axes[2]
     arima_errors = test_actual - arima_predictions
     lstm_errors = test_actual[lookback:] - lstm_predictions
 
-    ax3.plot(arima_dates, arima_errors, 's-', label='ARIMA Error', color='blue',
-             linewidth=2, markersize=6)
+    ax3.plot(arima_dates, arima_errors, 's-', label='ARIMA Error', color='blue', linewidth=2, markersize=6)
     ax3.plot(lstm_dates, lstm_errors, '^-', label='LSTM Error', color='green',
              linewidth=2, markersize=6)
     ax3.axhline(y=0, color='black', linestyle='-', linewidth=1)
@@ -271,12 +269,12 @@ def visualize_results(df, train_df, test_df, arima_predictions, lstm_predictions
 
     plt.tight_layout()
     plt.savefig('phase2_model_comparison.png', dpi=300, bbox_inches='tight')
-    print("   Saved: phase2_model_comparison.png")
+    print("phase2_model_comparison.png is now saved")
 
     plt.close()
 
 def main():
-    """Main execution pipeline"""
+    # Main execution pipeline
 
     # Load and split data
     df, train_df, test_df = load_and_split_data()
@@ -286,9 +284,7 @@ def main():
 
     # Prepare LSTM data
     lookback = 14
-    X_train, y_train, X_test, y_test, scaler, feature_cols = prepare_lstm_data(
-        train_df, test_df, lookback=lookback
-    )
+    X_train, y_train, X_test, y_test, scaler, feature_cols = prepare_lstm_data(train_df, test_df, lookback=lookback)
 
     # Build and train LSTM
     lstm_model = build_lstm_model(input_shape=(lookback, len(feature_cols)))
@@ -300,38 +296,32 @@ def main():
     )
 
     # Visualize results
-    visualize_results(df, train_df, test_df, arima_predictions, lstm_predictions,
-                     arima_rmse, lstm_rmse, lookback)
+    visualize_results(df, train_df, test_df, arima_predictions, lstm_predictions, arima_rmse, lstm_rmse, lookback)
 
     # Final comparison
-    print("\n" + "=" * 80)
     print("FINAL RESULTS: ARIMA vs LSTM")
-    print("=" * 80)
-    print(f"\nARIMA (Polling Only):")
-    print(f"  RMSE: {arima_rmse:.3f}")
-    print(f"  MAE:  {arima_mae:.3f}")
+    print(f"ARIMA (Polling Only):")
+    print(f"RMSE: {arima_rmse:.3f}")
+    print(f"MAE:  {arima_mae:.3f}")
 
-    print(f"\nLSTM (Polling + Social Media Sentiment):")
-    print(f"  RMSE: {lstm_rmse:.3f}")
-    print(f"  MAE:  {lstm_mae:.3f}")
-
+    print(f"LSTM (Polling + Social Media Sentiment):")
+    print(f"RMSE: {lstm_rmse:.3f}")
+    print(f"MAE:  {lstm_mae:.3f}")
     improvement = ((arima_rmse - lstm_rmse) / arima_rmse) * 100
-    print(f"\nImprovement: {improvement:.1f}%")
+    print(f"\nImprovement: {improvement:.3f}%")
 
     if lstm_rmse < arima_rmse:
-        print("\nConclusion: LSTM with social media sentiment OUTPERFORMS baseline ARIMA!")
+        print("Conclusion: LSTM with social media sentiment OUTPERFORMS baseline ARIMA!")
         print("Hypothesis CONFIRMED: Social media acts as a leading indicator.")
     else:
-        print("\nConclusion: ARIMA baseline performs better.")
+        print("Conclusion: ARIMA baseline performs better.")
         print("Hypothesis REJECTED: Social media does not improve predictions.")
 
-    print("\n" + "=" * 80)
-    print("Phase 2 Modeling Complete!")
-    print("=" * 80)
+    print("Modeling Complete!")
 
     # Save models
     lstm_model.save('data/lstm_model.keras')
-    print("\nLSTM model saved to: data/lstm_model.keras")
+    print("LSTM model saved to data/lstm_model.keras")
 
 if __name__ == "__main__":
     main()
