@@ -1,6 +1,6 @@
 """
 This is not a part of the main project.
-Step Z - Exploratory Time Series Analysis and Visualization
+Step 0 - Exploratory Time Series Analysis and Visualization
 """
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -24,10 +24,9 @@ df['spread'] = df['sherrill_pct'] - df['opponent_pct']
 
 print("Time Series Dataset:")
 print(df[['poll_date', 'pollster', 'sherrill_pct', 'opponent_pct', 'spread', 'sample_size']].to_string(index=False))
-print("\n")
 
 df.to_csv('time_series_data.csv', index=False)
-print("Time series dataset saved to 'time_series_data.csv'\n")
+print("Time series dataset saved to 'time_series_data.csv'")
 
 fig, axes = plt.subplots(3, 1, figsize=(14, 12))
 
@@ -89,7 +88,7 @@ ax3.set_ylim(30, 60)
 
 plt.tight_layout()
 plt.savefig('time_series_analysis.png', dpi=300, bbox_inches='tight')
-print("Time series visualization saved to 'time_series_analysis.png'\n")
+print("Time series visualization saved to 'time_series_analysis.png'")
 
 # Create additional detailed scatter plot
 fig2, ax = plt.subplots(figsize=(14, 8))
@@ -111,7 +110,6 @@ ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('pollster_comparison.png', dpi=300, bbox_inches='tight')
-print("Pollster comparison saved to 'pollster_comparison.png'\n")
 
 # Print summary statistics
 print("Summary Statistics:")

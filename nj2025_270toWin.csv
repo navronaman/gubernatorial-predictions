@@ -1,4 +1,4 @@
-start_date,end_date,pollster,sample_size,population,sherril_totalvote,ciattarelli_totalvote,margin,youthvote_agerange,youthvote_s,youthvote_c,poll_url
+start_date,end_date,pollster,sample_size,population,sherril_pct,opponent_pct,margin,youthvote_agerange,youthvote_s,youthvote_c,poll_url
 2025-10-25,2025-10-30,AtlasIntel,1639,LV,50.0,49.0,1.0,18-29,73.3,24.7,https://www.270towin.com/doc_upload/Atlas-NJ-103125.pdf
 2025-10-24,2025-10-28,Fox News,956,LV,52.0,45.0,7.0,N/A,N/A,N/A,https://static.foxnews.com/foxnews.com/content/uploads/2025/10/fox_october-24-28-2025_nj-gov_topline_october-30-release.pdf
 2025-10-23,2025-10-28,Quinnipiac,1166,LV,51.0,43.0,8.0,N/A,N/A,N/A,https://poll.qu.edu/images/polling/nj/nj10302025_neze76.pdf
