@@ -1,12 +1,15 @@
 """
 Interactive Dashboard - "Pollsters" NJ Governor 2025 Prediction
 
+THIS IS STRICLY FOR DEMONSTRATION PURPOSES ONLY. This is not part of the actual project submission.
+Step 7
+
 Streamlit app to visualize the leading indicator effect of social media
 sentiment on polling predictions.
 
 Run with: streamlit run streamlit_app.py
 
-As indicated in the oral exam with TA Naina Chaturvedi, this dashboard was constructed with the help of Generative AI.
+As indicated in the oral exam with TA Naina Chaturvedi, this dashboard was constructed with the help of Generative AI namely cGPT and some usage of Gemini.
 """
 
 import streamlit as st

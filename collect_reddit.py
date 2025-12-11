@@ -1,5 +1,5 @@
 """
-Step 2: Generate Synthetic Reddit Data Correlated to Polling Trends for New Jersey 2025 Election Cycle
+Step 4: Generate Synthetic Reddit Data Correlated to Polling Trends for New Jersey 2025 Election Cycle
 
 This script generates synthetic Reddit posts whose sentiment and volume are correlated with the polling trends for the NJ Governor 2025 election.
 
@@ -22,8 +22,6 @@ def generate_correlated_data():
     # Load the Ground Truth - Time series processed polls
     polls_df = pd.read_csv("data/daily_polls_time_series.csv")
     polls_df['date'] = pd.to_datetime(polls_df['date'])
-
-    print("Generating Reddit data correlated to polling trends")
     
     reddit_data = []
     
@@ -124,9 +122,6 @@ def generate_correlated_data():
     output_path = "data/reddit_NewJersey_2025_correlated.csv"
     df.to_csv(output_path, index=False)
     
-    print(f"Success! Generated {len(df)} correlated posts.")
-    print(f"Saved to: {output_path}")
-    print("This data now mathematically 'leads' the polling data by 3 days.")
 
 if __name__ == "__main__":
     generate_correlated_data()

@@ -1,6 +1,7 @@
 """
-This is not a part of the main project.
-Step 0 - Exploratory Time Series Analysis and Visualization
+Step 2 - Exploratory Time Series Analysis and Visualization
+This script performs exploratory data analysis and visualization on the daily interpolated polling data for the NJ Governor 2025
+Main purpose of this step is to create a uniform time series dataset, the visualization is secondary but important for understanding trends.
 """
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,11 +10,13 @@ from datetime import datetime
 import numpy as np
 
 sns.set_style("whitegrid")
+
 plt.rcParams['figure.figsize'] = (14, 8)
 
 df = pd.read_csv('nj2025_270toWin.csv')
 
 df['start_date'] = pd.to_datetime(df['start_date'])
+
 df['end_date'] = pd.to_datetime(df['end_date'])
 
 df['poll_date'] = df['start_date'] + (df['end_date'] - df['start_date']) / 2
@@ -22,20 +25,19 @@ df = df.sort_values('poll_date')
 
 df['spread'] = df['sherrill_pct'] - df['opponent_pct']
 
-print("Time Series Dataset:")
-print(df[['poll_date', 'pollster', 'sherrill_pct', 'opponent_pct', 'spread', 'sample_size']].to_string(index=False))
+print(df[['poll_date', 'pollster', 'sherrill_pct', 'opponent_pct', 'spread', 'sample_size']].head())
 
 df.to_csv('time_series_data.csv', index=False)
-print("Time series dataset saved to 'time_series_data.csv'")
+
+# Here ends the substantive portion of the codefile
+# Below is the visualization code, which again, is not part of the submission per se
 
 fig, axes = plt.subplots(3, 1, figsize=(14, 12))
 
-# Polling percentages over time
 ax1 = axes[0]
 ax1.plot(df['poll_date'], df['sherrill_pct'], 'o-', label='Sherrill', color='blue', linewidth=2, markersize=8)
 ax1.plot(df['poll_date'], df['opponent_pct'], 's-', label='Opponent', color='red', linewidth=2, markersize=8)
 
-# Add trend lines
 z1 = np.polyfit(df.index, df['sherrill_pct'], 1)
 p1 = np.poly1d(z1)
 z2 = np.polyfit(df.index, df['opponent_pct'], 1)
@@ -50,13 +52,11 @@ ax1.legend(loc='best')
 ax1.grid(True, alpha=0.3)
 ax1.set_ylim(30, 60)
 
-# Spread over time
 ax2 = axes[1]
 colors = ['green' if x > 0 else 'orange' for x in df['spread']]
 ax2.bar(df['poll_date'], df['spread'], color=colors, alpha=0.6, width=2)
 ax2.axhline(y=0, color='black', linestyle='-', linewidth=1)
 
-# Add trend line for spread
 z3 = np.polyfit(df.index, df['spread'], 1)
 p3 = np.poly1d(z3)
 ax2.plot(df['poll_date'], p3(df.index), "--", color='darkblue', linewidth=2, label='Spread Trend')
@@ -67,7 +67,6 @@ ax2.set_title('Polling Spread Over Time', fontsize=14, fontweight='bold')
 ax2.legend(loc='best')
 ax2.grid(True, alpha=0.3)
 
-# 3-poll moving average
 ax3 = axes[2]
 df['sherrill_ma'] = df['sherrill_pct'].rolling(window=3, min_periods=1).mean()
 df['opponent_ma'] = df['opponent_pct'].rolling(window=3, min_periods=1).mean()
@@ -90,10 +89,8 @@ plt.tight_layout()
 plt.savefig('time_series_analysis.png', dpi=300, bbox_inches='tight')
 print("Time series visualization saved to 'time_series_analysis.png'")
 
-# Create additional detailed scatter plot
 fig2, ax = plt.subplots(figsize=(14, 8))
 
-# Create scatter plot with different markers for each pollster
 pollsters = df['pollster'].unique()
 colors_palette = plt.cm.tab20(np.linspace(0, 1, len(pollsters)))
 
@@ -110,17 +107,3 @@ ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('pollster_comparison.png', dpi=300, bbox_inches='tight')
-
-# Print summary statistics
-print("Summary Statistics:")
-print("=" * 80)
-print(f"Date Range: {df['poll_date'].min().strftime('%Y-%m-%d')} to {df['poll_date'].max().strftime('%Y-%m-%d')}")
-print(f"Sherrill Average: {df['sherrill_pct'].mean():.1f}%")
-print(f"Sherrill Std Dev: {df['sherrill_pct'].std():.1f}%")
-print(f"Sherrill Range: {df['sherrill_pct'].min():.0f}% - {df['sherrill_pct'].max():.0f}%")
-print(f"Opponent Average: {df['opponent_pct'].mean():.1f}%")
-print(f"Opponent Std Dev: {df['opponent_pct'].std():.1f}%")
-print(f"Opponent Range: {df['opponent_pct'].min():.0f}% - {df['opponent_pct'].max():.0f}%")
-print(f"Average Spread: {df['spread'].mean():.1f}%")
-print(f"Total Polls: {len(df)}")
-print(f"Number of Pollsters: {df['pollster'].nunique()}")

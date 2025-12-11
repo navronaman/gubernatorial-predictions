@@ -1,6 +1,6 @@
 """
 This is the magnum opus of the project.
-Step 4: Modeling - ARIMA Baseline vs LSTM with Social Media Sentiment
+Step 6: Modeling - ARIMA Baseline vs LSTM with Social Media Sentiment
 
 This script implements the core hypothesis test:
 - Baseline: ARIMA using only polling margin
@@ -63,15 +63,15 @@ def load_and_split_data():
     return df, train_df, test_df
 
 def train_arima_baseline(train_df, test_df):
-    """Train ARIMA model on margin_interpolated only"""
-    print(f"Training ARIMA Baseline Model")
-    print("Using only polling margin (no sentiment features)")
+    # Train ARIMA model on margin_interpolated only
+    print("Training ARIMA Baseline Model")
+    print("Using only polling margin ")
 
     # Extract target variable
     train_values = train_df['margin_interpolated'].values
     test_values = test_df['margin_interpolated'].values
 
-    # Fit ARIMA model (order can be tuned)
+    # Fit ARIMA model 
     # ARIMA(p, d, q) where p=lag order, d=differencing, q=moving average
     print("Fitting ARIMA(2,1,2) model")
     model = ARIMA(train_values, order=(2, 1, 2))
@@ -95,11 +95,11 @@ def prepare_lstm_data(train_df, test_df, lookback=14):
     Prepare 3D data for LSTM: (samples, lookback_window, features)
 
     Features used:
-    1. margin_interpolated (target, also used as feature)
+    1. margin_interpolated (both the target and the feature - time series analysis am i right?)
     2. reddit_avg_sentiment
     3. reddit_post_volume (normalized)
     """
-    print(f"Preparing data for LSTM...")
+    print("Preparing data for LSTM")
     print(f"Lookback window: {lookback} days")
 
     # Select features
@@ -118,7 +118,7 @@ def prepare_lstm_data(train_df, test_df, lookback=14):
     test_scaled = scaled_data[len(train_df):]
 
     def create_sequences(data, lookback):
-        """Create sequences of lookback days for LSTM"""
+        # Create sequences of lookback days for LSTM
         X, y = [], []
         for i in range(lookback, len(data)):
             X.append(data[i-lookback:i, :])  # All features for lookback period
@@ -269,7 +269,6 @@ def visualize_results(df, train_df, test_df, arima_predictions, lstm_predictions
 
     plt.tight_layout()
     plt.savefig('phase2_model_comparison.png', dpi=300, bbox_inches='tight')
-    print("phase2_model_comparison.png is now saved")
 
     plt.close()
 

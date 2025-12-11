@@ -1,6 +1,6 @@
 """
 This is for data collection for the nj2025_270toWin.csv dataset.
-Step -1:
+Step 1:
 Scrape New Jersey 2025 Governor Polling Data from 270toWin.com
 - Parse the HTML table containing polling data
 - Extract relevant fields: pollster, dates, sample size, percentages, margin

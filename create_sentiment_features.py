@@ -1,5 +1,5 @@
 """
-Step 3: Sentiment Feature Engineering Script for Phase 1 NLP
+Step 5: Sentiment Feature Engineering Script for Phase 1 NLP
 
 This script:
 1. Loads Reddit synthetic data
@@ -86,8 +86,6 @@ def create_sentiment_features():
         daily_sentiment['reddit_weighted_sentiment'] / daily_sentiment['reddit_total_upvotes']
     ).fillna(0)
 
-    print(f"Aggregated to {len(daily_sentiment)} daily entries")
-    print(f"Average daily post volume: {daily_sentiment['reddit_post_volume'].mean():.1f}")
 
     # Load polling data
     print("Loading polling ground truth data")
@@ -113,10 +111,6 @@ def create_sentiment_features():
     # Save Master Training Table
     output_path = 'data/master_training_table.csv'
     master_df.to_csv(output_path, index=False)
-
-    print(f"Master Training Table saved to: {output_path}")
-    print(f"Total rows: {len(master_df)}")
-    print(f"Total columns: {len(master_df.columns)}")
 
     return master_df
 
