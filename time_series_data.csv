@@ -1,23 +1,24 @@
-start_date,end_date,pollster,sample_size,population,sherrill_pct,opponent_pct,poll_date,spread
-2025-06-13,2025-06-16,Rutgers-Eagleton,621,A,56,35,2025-06-14 12:00:00,21
-2025-07-17,2025-07-23,Fairleigh Dickinson,806,RV,45,37,2025-07-20 00:00:00,8
-2025-07-31,2025-08-11,Rutgers-Eagleton,1650,LV,47,37,2025-08-05 12:00:00,10
-2025-08-25,2025-08-28,TIPP,1325,LV,46,39,2025-08-26 12:00:00,7
-2025-09-02,2025-09-04,Quantus Insights,600,LV,49,39,2025-09-03 00:00:00,10
-2025-09-11,2025-09-15,Quinnipiac,1238,LV,51,42,2025-09-13 00:00:00,9
-2025-09-22,2025-09-23,The Hill/Emerson,935,LV,43,43,2025-09-22 12:00:00,0
-2025-09-25,2025-09-28,FOX News,822,LV,50,42,2025-09-26 12:00:00,8
-2025-09-29,2025-09-30,Quantus Insights,900,LV,48,46,2025-09-29 12:00:00,2
-2025-10-08,2025-10-09,Rasmussen Reports,955,LV,46,40,2025-10-08 12:00:00,6
-2025-10-03,2025-10-17,Rutgers-Eagleton,795,LV,50,45,2025-10-10 00:00:00,5
-2025-10-09,2025-10-13,Quinnipiac,1327,LV,51,44,2025-10-11 00:00:00,7
-2025-10-10,2025-10-14,FOX News,869,LV,50,45,2025-10-12 00:00:00,5
-2025-10-09,2025-10-15,Fairleigh Dickinson,814,LV,52,45,2025-10-12 00:00:00,7
-2025-10-14,2025-10-15,Trafalgar/InsiderAdvantage,800,LV,45,44,2025-10-14 12:00:00,1
-2025-10-23,2025-10-27,co/efficient,995,LV,48,47,2025-10-25 00:00:00,1
-2025-10-23,2025-10-28,Quinnipiac,1166,LV,51,44,2025-10-25 12:00:00,7
-2025-10-24,2025-10-28,FOX News,956,LV,52,45,2025-10-26 00:00:00,7
-2025-10-26,2025-10-27,Quantus Insights,1308,LV,49,46,2025-10-26 12:00:00,3
-2025-10-25,2025-10-28,The Hill/Emerson,1000,LV,50,48,2025-10-26 12:00:00,2
-2025-10-26,2025-10-29,Suffolk,500,LV,46,42,2025-10-27 12:00:00,4
-2025-10-25,2025-10-30,Atlas Intel,1639,LV,50,49,2025-10-27 12:00:00,1
+start_date,end_date,pollster,sample_size,population,sherrill_pct,opponent_pct,margin,youthvote_agerange,youthvote_s,youthvote_c,poll_url,poll_date,spread
+2025-06-13,2025-06-16,Rutgers-Eagleton,621,RV,56.0,35.0,21.0,18-34,59.0,16.0,https://eagletonpoll.rutgers.edu/wp-content/uploads/2025/07/Rutgers-Eagleton-Poll-2025-NJ-Gov-Election-07.2.25-FINAL-PUBLIC-PDF.pdf,2025-06-14 12:00:00,21.0
+2025-07-17,2025-07-23,Fairleigh Dickinson,806,RV,45.0,37.0,8.0,18-30,46.0,24.0,https://www.fdu.edu/news/fdu-poll-finds-sherrill-leads-by-single-digits-in-governors-race/,2025-07-20 00:00:00,8.0
+2025-07-29,2025-08-02,A2 Insights,629,LV,51.0,45.0,6.0,18-44,55.0,40.0,https://drive.google.com/file/d/1gHrYCh65vCKw6T_WWQJkVMXTZBwcJYe1/view,2025-07-31 00:00:00,6.0
+2025-07-31,2025-08-11,Rutgers-Eagleton,1650,LV,47.0,37.0,10.0,18-34,48.0,21.0,https://eagletonpoll.rutgers.edu/wp-content/uploads/2025/08/Rutgers-Eagleton-Poll-2025-NJ-Gov-Election-8.20.25-FINAL-PUBLIC-PDF.pdf,2025-08-05 12:00:00,10.0
+2025-09-02,2025-09-04,Quantus Insights,600,LV,47.0,37.0,10.0,18-25,53.0,24.0, https://drive.google.com/file/d/1EOTKerqHiLACRR6GKsL4KGwUvakV03vq/view,2025-09-03 00:00:00,10.0
+2025-09-11,2025-09-15,Quinnipiac,1238,LV,49.0,41.0,8.0,,,,https://poll.qu.edu/images/polling/nj/nj09172025_njow64.pdf,2025-09-13 00:00:00,8.0
+2025-09-22,2025-09-23,Emerson College,935,LV,43.0,43.0,0.0,,,,https://emersoncollegepolling.com/new-jersey-2025-poll/,2025-09-22 12:00:00,0.0
+2025-09-25,2025-09-28,Fox News,822,LV,50.0,42.0,8.0,,,,https://static.foxnews.com/foxnews.com/content/uploads/2025/09/fox_september-25-28-2025_nj-gov_topline_september-30-release.pdf,2025-09-26 12:00:00,8.0
+2025-09-29,2025-09-30,Quantus Insights,900,LV,48.0,46.0,2.0,,,, https://drive.google.com/file/d/1i9hhwws5QrKEUR2YuPi2w7d8SwH6Q0bv/view,2025-09-29 12:00:00,2.0
+2025-10-03,2025-10-17,Rutgers-Eagleton,795,LV,50.0,45.0,5.0,18-34,49.0,43.0,https://eagletonpoll.rutgers.edu/wp-content/uploads/2025/10/Rutgers-Eagleton-Poll-2025-NJ-Gov-Election-10.22.25-FINAL-PUBLIC.pdf,2025-10-10 00:00:00,5.0
+2025-10-09,2025-10-13,Quinnipiac,1327,LV,50.0,44.0,6.0,,,,https://poll.qu.edu/images/polling/nj/nj10152025_njpa20.pdf,2025-10-11 00:00:00,6.0
+2025-10-09,2025-10-15,Fairleigh Dickinson,814,LV,52.0,45.0,7.0,,,,http://www.fdu.edu/news/fdu-poll-finds-sherrill-maintains-lead-in-governors-race/,2025-10-12 00:00:00,7.0
+2025-10-14,2025-10-15,InsiderAdvantage,800,LV,45.0,44.0,1.0,18-39,38.7,48.4,https://insideradvantage.com/breaking-insideradvantage-trafalgar-group-new-jersey-survey-sherrill-leads-ciattarelli-by-one-point/,2025-10-14 12:00:00,1.0
+2025-10-14,2025-10-15,Fox News,869,LV,50.0,45.0,5.0,,,,https://static.foxnews.com/foxnews.com/content/uploads/2025/10/fox_october-10-14-2025_nj-gov_topline_october-16-release.pdf,2025-10-14 12:00:00,5.0
+2025-10-17,2025-10-28,YouGov,1153,LV,54.0,44.0,10.0,,,,https://d3nkl3psvxxpe9.cloudfront.net/documents/newjersey_20251030.pdf,2025-10-22 12:00:00,10.0
+2025-10-24,2025-10-26,A2 Insights,812,LV,51.0,47.0,4.0,18-39,53.0,44.0, https://drive.google.com/file/d/19hIRkcP9TJtitcfGgdQtWYrpekft_Pam/view,2025-10-25 00:00:00,4.0
+2025-10-23,2025-10-28,Quinnipiac,1166,LV,51.0,43.0,8.0,,,,https://poll.qu.edu/images/polling/nj/nj10302025_neze76.pdf,2025-10-25 12:00:00,8.0
+2025-10-24,2025-10-28,Fox News,956,LV,52.0,45.0,7.0,,,,https://static.foxnews.com/foxnews.com/content/uploads/2025/10/fox_october-24-28-2025_nj-gov_topline_october-30-release.pdf,2025-10-26 00:00:00,7.0
+2025-10-25,2025-10-28,Emerson College,1000,LV,50.0,48.0,2.0,,,,https://emersoncollegepolling.com/new-york-city-mayor-and-new-jersey-governor-2025/,2025-10-26 12:00:00,2.0
+2025-10-27,2025-10-27,co/efficient,995,LV,48.0,47.0,1.0,18-34,57.0,31.0, https://coefficient.org/new-jersey-statewide-2025-general-election/,2025-10-27 00:00:00,1.0
+2025-10-26,2025-10-29,Suffolk University,500,LV,46.0,42.0,4.0,,,,https://www.suffolk.edu/-/media/suffolk/documents/academics/research-at-suffolk/suprc/polls/other-states/2025/10_30_2025_new_jersey_statewide_final_marginals.pdf,2025-10-27 12:00:00,4.0
+2025-10-25,2025-10-30,AtlasIntel,1639,LV,50.0,49.0,1.0,18-29,73.3,24.7,https://www.270towin.com/doc_upload/Atlas-NJ-103125.pdf,2025-10-27 12:00:00,1.0
+2025-10-28,2025-10-28,Quantus Insights,1380,LV,49.0,46.0,3.0,,,, https://drive.google.com/file/d/1zmsKFcLKcFZN8frSvAbIucmNx-z-eoDj/view,2025-10-28 00:00:00,3.0
